@@ -24,8 +24,7 @@ const generateMailTransporter = async () => {
 
 
 const sendMailOfStaffAdded = async (accountInfo, creatorEmail, ownerEmail) => {
-    const timeElapse = Date.now()
-    const timeStamp = new Date(timeElapse)
+    const timeStamp = new Date()
 
     const mailTransporter = await generateMailTransporter()
 
@@ -55,9 +54,8 @@ const sendMailOfStaffAdded = async (accountInfo, creatorEmail, ownerEmail) => {
     }
 }
 
-const sendMailOfStaffChanged = async (username, staffEmail) => {
-    const timeElapse = Date.now()
-    const timeStamp = new Date(timeElapse)
+const sendMailOfStaffChanged = async (username, reportLink, staffEmail) => {
+    const timeStamp = new Date()
 
     const mailTransporter = await generateMailTransporter()
 
@@ -65,12 +63,81 @@ const sendMailOfStaffChanged = async (username, staffEmail) => {
         from: config.BUSINESS_EMAIL,
         to: staffEmail,
         subject: "Modern Bistro 77 - Information changed",
-        html: `<p>Your information in the registered staff account has been changed at ${timeStamp.toUTCString()}. 
-        Please send a report if you have not made this change.</p>`
+        html: `<p>Your information in the registered staff account with username ${username} 
+        has been changed at ${timeStamp.toUTCString()}. 
+        Please send a report via the link below if you have not made this change.</p>
+        <a href={${reportLink}}>${reportLink}</a>`
     }
     await mailTransporter.sendMail(details)
 }
 
+const sendMailOfStaffChangedByManager = async (username, reportLink, managerEmail, staffEmail ) => {
+    const timeStamp = new Date()
 
+    const mailTransporter = await generateMailTransporter()
 
-module.exports = { sendMailOfStaffAdded }
+    const toManagerDetails = {
+        from: config.BUSINESS_EMAIL,
+        to: managerEmail,
+        subject: "Modern Bistro 77 - Information changed",
+        html: `<p>Staff's information in the registered staff account with username ${username} 
+        has been changed at ${timeStamp.toUTCString()} with your account. 
+        Please send a report via the link below if you have not made this change.</p>
+        <a href={${reportLink}}>${reportLink}</a>`
+    }
+
+    await mailTransporter.sendMail(toManagerDetails)
+
+    if (staffEmail) {
+        const toStaffDetails = {
+            from: config.BUSINESS_EMAIL,
+            to: staffEmail,
+            subject: "Modern Bistro 77 - Information changed",
+            html: `<p>Your information in the registered staff account with username ${username} 
+            has been changed at ${timeStamp.toUTCString()} by your manager. 
+            Please send a report via the link below if you are not aware of this change.</p>
+            <a href={${reportLink}}>${reportLink}</a>`
+        }
+
+        await mailTransporter.sendMail(toStaffDetails)
+    }
+}
+
+const sendMailOfStaffRemoved = async (username, reportLink, managerEmail, staffEmail) => {
+    const timeStamp = new Date()
+
+    const mailTransporter = await generateMailTransporter()
+
+    const toManagerDetails = {
+        from: config.BUSINESS_EMAIL,
+        to: managerEmail,
+        subject: "Modern Bistro 77 - Information changed",
+        html: `<p>The registered staff account with username ${username} 
+        has been removed at ${timeStamp.toUTCString()} with your account. 
+        Please send a report via the link below if you have not made this change.</p>
+        <a href={${reportLink}}>${reportLink}</a>`
+    }
+
+    await mailTransporter.sendMail(toManagerDetails)
+
+    if (staffEmail) {
+        const toStaffDetails = {
+            from: config.BUSINESS_EMAIL,
+            to: staffEmail,
+            subject: "Modern Bistro 77 - Information changed",
+            html: `<p>Your registered staff account with username ${username} 
+            has been removed at ${timeStamp.toUTCString()} by your manager. 
+            Please send a report via the link below if you are not aware of this change.</p>
+            <a href={${reportLink}}>${reportLink}</a>`
+        }
+
+        await mailTransporter.sendMail(toStaffDetails)
+    }
+}
+
+module.exports = { 
+    sendMailOfStaffAdded, 
+    sendMailOfStaffChanged, 
+    sendMailOfStaffChangedByManager, 
+    sendMailOfStaffRemoved 
+}

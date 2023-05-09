@@ -3,22 +3,27 @@ const uniqueValidator = require('mongoose-unique-validator')
 const toJSON = require('./toJSON')
 
 const staffSchema = new mongoose.Schema({
-    name: {
-        type: String,
-        required: [true, "Name is missing!"]
-    },
-    email: String,
-    phoneNumber: String,
     username: {
         type: String,
         required: true,
         unique: true
     },
-    password: {
+    passwordHash: {
         type: String,
         required: true
     },
-    isManager: Boolean
+    isManager: Boolean,
+    firstName: {
+        type: String,
+        required: [true, "First name is missing!"]
+    },
+    lastName: {
+        type: String,
+        required: [true, "Last name is missing!"]
+    },
+    email: String,
+    phoneNumber: String,
+    image: String
 })
 
 staffSchema.set('toJSON', {transform: toJSON})

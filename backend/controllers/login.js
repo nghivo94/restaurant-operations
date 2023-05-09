@@ -1,8 +1,8 @@
 const bcrypt = require('bcryptjs')
 const jwt = require('jsonwebtoken')
 
+const middleware = require('../utils/middleware')
 const Staff = require('../models/staff')
-const { response } = require('express')
 
 const loginRouter = require('express').Router()
 
@@ -29,10 +29,18 @@ loginRouter.post('/', async (request, response) => {
         { expiresIn: 60*60 }
     )
 
-    response.status(200).json({ token: token, ...user })
+    response.status(200).json({ 
+        token: token, 
+        username: user.username, 
+        isManager: user.isManager,
+        firstName: user.firstName, 
+        lastName: user.lastName, 
+        email: user.email,
+        phoneNumber: user.phoneNumber
+    })
 })
 
-loginRouter.post('/token', async (request, response) => {
+loginRouter.post('/token', middleware.tokenExtractor, middleware.userExtractor, async (request, response) => {
     const user = request.user
     const token = request.token
 
@@ -40,7 +48,15 @@ loginRouter.post('/token', async (request, response) => {
         response.status(401).json({ error: "missing token" })
     }
 
-    response.status(200).json({ token: token, ...user })
+    response.status(200).json({ 
+        token: token, 
+        username: user.username, 
+        isManager: user.isManager,
+        firstName: user.firstName, 
+        lastName: user.lastName, 
+        email: user.email,
+        phoneNumber: user.phoneNumber 
+    })
 })
 
 module.exports = loginRouter

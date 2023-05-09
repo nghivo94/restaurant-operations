@@ -20,11 +20,8 @@ app.use(express.json())
 const mongoUrl = config.MONGODB_URI
 mongoose.connect(mongoUrl)
 
-app.use(middleware.tokenExtractor)
-app.use(middleware.userExtractor)
-
 app.use('/api/login', loginRouter)
-app.use('/api/staff', staffRouter)
+app.use('/api/staff', middleware.tokenExtractor, middleware.userExtractor, staffRouter)
 
 app.use(middleware.errorHandler)
 

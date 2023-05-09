@@ -1,6 +1,6 @@
 const mongoose = require('mongoose')
 const uniqueValidator = require('mongoose-unique-validator')
-const toJSON = require('./toJSON')
+const transform = require('../utils/transform')
 
 const staffSchema = new mongoose.Schema({
     username: {
@@ -26,7 +26,7 @@ const staffSchema = new mongoose.Schema({
     image: String
 })
 
-staffSchema.set('toJSON', {transform: toJSON})
+staffSchema.set('toJSON', {transform: transform.toJSON})
 staffSchema.plugin(uniqueValidator)
 
 module.exports = mongoose.model("Staff", staffSchema)

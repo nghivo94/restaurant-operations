@@ -1,6 +1,6 @@
 const mongoose = require('mongoose')
 const uniqueValidator = require('mongoose-unique-validator')
-const toJSON = require('./toJSON')
+const transform = require('../utils/transform')
 
 const menuItemSchema = new mongoose.Schema({
     name: {
@@ -16,7 +16,7 @@ const menuItemSchema = new mongoose.Schema({
     }]
 })
 
-menuItemSchema.set('toJSON', {transform: toJSON})
+menuItemSchema.set('toJSON', {transform: transform.toJSON})
 menuItemSchema.plugin(uniqueValidator)
 
 module.exports = mongoose.model("MenuItems", menuItemSchema)

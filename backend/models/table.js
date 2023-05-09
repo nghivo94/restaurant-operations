@@ -1,6 +1,6 @@
 const mongoose = require('mongoose')
 const uniqueValidator = require('mongoose-unique-validator')
-const toJSON = require('./toJSON')
+const transform = require('../utils/transform')
 
 const tableSchema = new mongoose.Schema({
     number: {
@@ -15,7 +15,7 @@ const tableSchema = new mongoose.Schema({
     location: String
 })
 
-tableSchema.set('toJSON', {transform: toJSON})
+tableSchema.set('toJSON', {transform: transform.toJSON})
 tableSchema.plugin(uniqueValidator)
 
 module.exports = mongoose.model("Tables", tableSchema)

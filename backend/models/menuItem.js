@@ -12,11 +12,11 @@ const menuItemSchema = new mongoose.Schema({
     image: String,
     sections: [{
         type: mongoose.Schema.Types.ObjectId,
-        ref: "MenuSections"
+        ref: "MenuSection"
     }]
 })
 
 menuItemSchema.set('toJSON', {transform: transform.toJSON})
 menuItemSchema.plugin(uniqueValidator)
 
-module.exports = mongoose.model("MenuItems", menuItemSchema)
+module.exports = mongoose.model("MenuItem", menuItemSchema)

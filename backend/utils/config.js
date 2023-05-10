@@ -15,6 +15,8 @@ const CLIENT_SECRET = process.env.CLIENT_SECRET
 const REDIRECT_URI = process.env.REDIRECT_URI
 const REFRESH_TOKEN = process.env.REFRESH_TOKEN
 
+const REPORT_LINK = process.env.REPORT_LINK
+
 module.exports = {
     PORT, 
     MONGODB_URI, 
@@ -24,5 +26,6 @@ module.exports = {
     CLIENT_ID,
     CLIENT_SECRET,
     REDIRECT_URI,
-    REFRESH_TOKEN
+    REFRESH_TOKEN,
+    REPORT_LINK
 }

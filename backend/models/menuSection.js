@@ -10,11 +10,11 @@ const menuSectionSchema = new mongoose.Schema({
     },
     subSections: [{
         type: mongoose.Schema.Types.ObjectId,
-        ref: "MenuSections"
+        ref: "MenuSection"
     }],
     items: [{
         type: mongoose.Schema.Types.ObjectId,
-        ref: "MenuItems"
+        ref: "MenuItem"
     }]
 })
 

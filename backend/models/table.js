@@ -18,4 +18,4 @@ const tableSchema = new mongoose.Schema({
 tableSchema.set('toJSON', {transform: transform.toJSON})
 tableSchema.plugin(uniqueValidator)
 
-module.exports = mongoose.model("Tables", tableSchema)
+module.exports = mongoose.model("Table", tableSchema)

@@ -12,7 +12,14 @@ const staffSchema = new mongoose.Schema({
         type: String,
         required: true
     },
-    isManager: Boolean,
+    isManager: {
+        type: Boolean,
+        default: false
+    },
+    isDeleted: {
+        type: Boolean,
+        default: false
+    },
     firstName: {
         type: String,
         required: [true, "First name is missing!"]
@@ -23,7 +30,11 @@ const staffSchema = new mongoose.Schema({
     },
     email: String,
     phoneNumber: String,
-    image: String
+    image: String,
+    expireAt: {
+        type: Date,
+        index: { expires: 60*60*24*30, partialFilterExpression: { isDeleted: true } }
+    }
 })
 
 staffSchema.set('toJSON', {transform: transform.toJSON})

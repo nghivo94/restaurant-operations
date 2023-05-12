@@ -4,20 +4,21 @@ const transform = require('../utils/transform')
 const reportSchema = new mongoose.Schema({
     toChange: {
         type: mongoose.Schema.Types.ObjectId,
-        ref: "StaffChange"
+        ref: "StaffChange",
+        required: true
     },
-    fromAccount: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: "Staff"
+    reporterName: {
+        type: String,
+        required: true
     },
     timeStamp: {
         type: Date,
-        default: new Date()
+        default: Date.now
     },
     message: String,
     expireAt: {
         type: Date,
-        default: new Date(),
+        default: Date.now,
         index: { expires: 60*60*24*30 }
     }
 })

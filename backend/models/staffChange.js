@@ -20,6 +20,10 @@ const staffChangeSchema = new mongoose.Schema({
         type: String,
         required: true
     },
+    reports: [{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Report"
+    }],
     expireAt: {
         type: Date,
         default: Date.now,

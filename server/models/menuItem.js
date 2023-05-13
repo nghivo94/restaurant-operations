@@ -8,11 +8,22 @@ const menuItemSchema = new mongoose.Schema({
         required: true,
         unique: true
     },
+    price: {
+        type: Number,
+        required: true
+    },
     description: String,
     image: String,
     sections: [{
         type: mongoose.Schema.Types.ObjectId,
         ref: "MenuSection"
+    }],
+    configurations: {
+        type: Object
+    },
+    sideItems: [{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "SideItem"
     }]
 })
 

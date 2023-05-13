@@ -21,4 +21,4 @@ const menuSectionSchema = new mongoose.Schema({
 menuSectionSchema.set('toJSON', {transform: transform.toJSON})
 menuSectionSchema.plugin(uniqueValidator)
 
-module.exports = mongoose.model("MenuSections", menuSectionSchema)
+module.exports = mongoose.model("MenuSection", menuSectionSchema)

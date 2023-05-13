@@ -16,6 +16,10 @@ const reportSchema = new mongoose.Schema({
         default: Date.now
     },
     message: String,
+    isResolve: {
+        type: Boolean,
+        default: false
+    },
     expireAt: {
         type: Date,
         default: Date.now,

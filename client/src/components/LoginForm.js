@@ -6,6 +6,7 @@ import loginService from '../services/login'
 import { setUser } from '../reducers/userReducer'
 import { setNotification } from '../reducers/notificationReducer'
 import { startLoading, stopLoading } from "../reducers/loadingReducer"
+import Loading from "./Loading";
 
 const LoginForm = () => {
     const dispatch = useDispatch()
@@ -90,9 +91,7 @@ const LoginForm = () => {
                     </form>
                 </div>
             </div>
-            {loading && <div className="absolute bg-white/70 z-10 h-screen w-screen flex justify-center align-middle">
-                <div class="lds-ring"><div></div><div></div><div></div><div></div></div>
-            </div>}
+            {loading && <Loading />}
         </div>
     )
 }

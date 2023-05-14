@@ -15,7 +15,7 @@ loginRouter.post('/', async (request, response) => {
         : await bcrypt.compare(body.password, user.passwordHash)
     
     if (!(user && passwordCorrect)) {
-        return response.status(401).json({ error: "invalid username or password"})
+        return response.status(401).json({ error: "Invalid username or password"})
     }
 
     const userForToken = {
@@ -31,12 +31,9 @@ loginRouter.post('/', async (request, response) => {
 
     response.status(200).json({ 
         token: token, 
-        username: user.username, 
         isManager: user.isManager,
-        firstName: user.firstName, 
-        lastName: user.lastName, 
-        email: user.email,
-        phoneNumber: user.phoneNumber
+        firstName: user.firstName,
+        image: user.image
     })
 })
 
@@ -50,12 +47,9 @@ loginRouter.post('/token', middleware.tokenExtractor, middleware.userExtractor, 
 
     response.status(200).json({ 
         token: token, 
-        username: user.username, 
         isManager: user.isManager,
-        firstName: user.firstName, 
-        lastName: user.lastName, 
-        email: user.email,
-        phoneNumber: user.phoneNumber 
+        firstName: user.firstName,
+        image: user.image
     })
 })
 

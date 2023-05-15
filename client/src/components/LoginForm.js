@@ -3,32 +3,22 @@ import BACKGROUND from '../assets/login_background.jpg'
 import { BiError } from "react-icons/bi";
 
 import loginService from '../services/login'
-import { setUser } from '../reducers/userReducer'
+import { setUser, loginUser } from '../reducers/userReducer'
 import { setNotification } from '../reducers/notificationReducer'
 import { startLoading, stopLoading } from "../reducers/loadingReducer"
 import Loading from "./Loading";
 
 const LoginForm = () => {
     const dispatch = useDispatch()
-    const loading = useSelector(state => state.loading)
+    const user = useSelector(state => state.user.user)
+    const error = useSelector(state => state.user.error)
+    const isLoading = useSelector(state => state.user.isLoading)
     const notification = useSelector(state => state.notification)
     const handleLogin = async (event) => {
         event.preventDefault()
         const username = event.target.username.value
         const password = event.target.password.value
-        dispatch(startLoading())
-        try {
-            const user = await loginService.loginFromCredentials({ username: username, password: password })
-            dispatch(setUser(user))
-            window.localStorage.setItem('loggedInToken', user.token)
-        } catch (error) {
-            if (error.response.data) {
-                dispatch(setNotification(error.response.data.error, true, 5000))
-            } else {
-                dispatch(setNotification(error.message, true, 5000))
-            }
-        }
-        dispatch(stopLoading())
+        dispatch(loginUser({ username: username, password: password, errorTimeout: 5000 }))
     }
     const handleAlert = () => {
         window.alert('This application is for internal usage only. Please contact your manager if any problems occur with your staff account.')
@@ -49,10 +39,10 @@ const LoginForm = () => {
                     md:ml-48 mx-10
                     bg-white/[.80]'>
                     <div className='font-display text-6xl text-center my-16 flex-grow-0'>Login</div>
-                    {notification.message && 
+                    {error && 
                     <div 
                         className='bg-yellow-100 p-2 mb-2 border-4 border-yellow-200 border-dotted rounded-xl mx-10
-                        text-lg font-normal flex flex-row items-center'><BiError size={'1.60rem'} className="mr-2"/> {notification.message}</div>
+                        text-lg font-normal flex flex-row items-center'><BiError size={'1.60rem'} className="mr-2"/> {error}</div>
                     }
                     <form 
                         onSubmit={handleLogin} 
@@ -91,7 +81,7 @@ const LoginForm = () => {
                     </form>
                 </div>
             </div>
-            {loading && <Loading />}
+            {isLoading && <Loading />}
         </div>
     )
 }

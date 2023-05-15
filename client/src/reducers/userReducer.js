@@ -1,18 +1,60 @@
-import { createSlice } from "@reduxjs/toolkit";
+import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
+import loginService from "../services/login"
+
+const initialState = {
+    user : null,
+    isLoading: false,
+    error: null
+}
 
 const userSlice = createSlice({
     name: 'user',
-    initialState: {},
+    initialState: initialState,
     reducers: {
         setUser (state, action) {
             return action.payload
         },
         removeUser (state, action) {
-            return {}
+            return initialState
+        },
+        removeError (state, action) {
+            return {...state, error: null}
         }
+    },
+    extraReducers: (builder) => {
+        builder.addCase(loginUser.pending, (state) => {
+            state.isLoading = true
+        })
+        builder.addCase(loginUser.fulfilled, (state, action) => {
+            state.isLoading = false
+            state.user = action.payload
+        })
+        builder.addCase(loginUser.rejected, (state, action) => {
+            state.isLoading = false
+            state.error = action.payload
+        })
     }
 })
 
-export const { setUser, removeUser } = userSlice.actions
+export const { setUser, removeUser, removeError } = userSlice.actions
+
+export const loginUser = createAsyncThunk(
+    'user/login',
+    async ({ username, password, errorTimeout }, { rejectWithValue, dispatch }) => {
+        try {
+            const user = await loginService.loginFromCredentials({ username: username, password: password} )
+            window.localStorage.setItem('loggedInToken', user.token)
+            return user
+        } catch (error) {
+            const message = error.response ? error.response.data.error : error.message
+            if (errorTimeout) {
+                setTimeout(() => {
+                    dispatch(removeError())
+                }, errorTimeout)
+            }
+            throw rejectWithValue(message)
+        }
+    }
+)
 
 export default userSlice.reducer

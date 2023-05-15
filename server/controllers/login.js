@@ -31,6 +31,7 @@ loginRouter.post('/', async (request, response) => {
 
     response.status(200).json({ 
         token: token, 
+        username: user.username,
         isManager: user.isManager,
         firstName: user.firstName,
         image: user.image
@@ -47,6 +48,7 @@ loginRouter.post('/token', middleware.tokenExtractor, middleware.userExtractor, 
 
     response.status(200).json({ 
         token: token, 
+        username: user.username,
         isManager: user.isManager,
         firstName: user.firstName,
         image: user.image

@@ -1,5 +1,5 @@
 import { useDispatch, useSelector } from "react-redux"
-import { Link } from "react-router-dom"
+import { Link, useNavigate } from "react-router-dom"
 import { FaUserCircle } from "react-icons/fa"
 import { IoMdArrowDropdown, IoMdArrowDropup } from "react-icons/io"
 import { useState } from "react"
@@ -9,10 +9,12 @@ const Navbar = () => {
     const dispatch = useDispatch()
     const user = useSelector(state => state.user.user)
     const [menuVisible, setMenuVisible] = useState(false)
+    const nagivate = useNavigate()
     const handleLogout = () => {
         if (window.confirm('Logout of current staff account?')) {
             window.localStorage.removeItem('loggedInToken')
             dispatch(removeUser())
+            nagivate("/")
         }
     }
 

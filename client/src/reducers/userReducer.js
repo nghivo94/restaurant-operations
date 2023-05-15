@@ -57,4 +57,23 @@ export const loginUser = createAsyncThunk(
     }
 )
 
+export const fetchUser = createAsyncThunk(
+    'user/fetch',
+    async (obj, { rejectWithValue, dispatch }) => {
+        try {
+            const token = window.localStorage.getItem('loggedInToken')
+            if (token) {
+                const user = await loginService.loginFromToken(token)
+                return user
+            }
+        } catch (error) {
+            const message = error.response ? error.response.data.error : error.message
+            if (message === 'token expired') {
+                window.localStorage.removeItem('loggedInToken')
+            }
+            throw rejectWithValue(message)
+        }
+    }
+)
+
 export default userSlice.reducer

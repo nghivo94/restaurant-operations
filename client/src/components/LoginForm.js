@@ -2,18 +2,13 @@ import { useDispatch, useSelector } from "react-redux"
 import BACKGROUND from '../assets/login_background.jpg'
 import { BiError } from "react-icons/bi";
 
-import loginService from '../services/login'
-import { setUser, loginUser } from '../reducers/userReducer'
-import { setNotification } from '../reducers/notificationReducer'
-import { startLoading, stopLoading } from "../reducers/loadingReducer"
+import { loginUser } from '../reducers/userReducer'
 import Loading from "./Loading";
 
 const LoginForm = () => {
     const dispatch = useDispatch()
-    const user = useSelector(state => state.user.user)
     const error = useSelector(state => state.user.error)
     const isLoading = useSelector(state => state.user.isLoading)
-    const notification = useSelector(state => state.notification)
     const handleLogin = async (event) => {
         event.preventDefault()
         const username = event.target.username.value

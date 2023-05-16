@@ -11,9 +11,6 @@ const userSlice = createSlice({
     name: 'user',
     initialState: initialState,
     reducers: {
-        setUser (state, action) {
-            return action.payload
-        },
         removeUser (state, action) {
             return initialState
         },
@@ -33,10 +30,20 @@ const userSlice = createSlice({
             state.isLoading = false
             state.error = action.payload
         })
+        builder.addCase(fetchUser.pending, (state) => {
+            state.isLoading = true
+        })
+        builder.addCase(fetchUser.fulfilled, (state, action) => {
+            state.isLoading = false
+            state.user = action.payload
+        })
+        builder.addCase(fetchUser.rejected, (state) => {
+            state.isLoading = false
+        })
     }
 })
 
-export const { setUser, removeUser, removeError } = userSlice.actions
+export const { removeUser, removeError } = userSlice.actions
 
 export const loginUser = createAsyncThunk(
     'user/login',
@@ -59,7 +66,7 @@ export const loginUser = createAsyncThunk(
 
 export const fetchUser = createAsyncThunk(
     'user/fetch',
-    async (obj, { rejectWithValue, dispatch }) => {
+    async (obj, { rejectWithValue }) => {
         try {
             const token = window.localStorage.getItem('loggedInToken')
             if (token) {

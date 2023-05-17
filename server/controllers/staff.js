@@ -85,9 +85,9 @@ staffRouter.post('/', async (request, response) => {
     response.status(201).json(savedStaff)
 })
 
-staffRouter.get('/:id', async (request, response) => {
+staffRouter.get('/:username', async (request, response) => {
     const user = request.user
-    const staff = await Staff.findById(request.params.id)
+    const staff = await Staff.findOne({ username: request.params.username })
     if (!staff || staff.isDeleted) {
         return response.status(404).end()
     }
@@ -97,10 +97,10 @@ staffRouter.get('/:id', async (request, response) => {
     response.json(staff)
 })
 
-staffRouter.put('/:id', async (request, response) => {
+staffRouter.put('/:username', async (request, response) => {
     const body = request.body
     const user = request.user
-    const staff = await Staff.findById(request.params.id)
+    const staff = await Staff.findOne({ username: request.params.username })
     if (!staff || staff.isDeleted) {
         return response.status(404).end()
     }
@@ -120,7 +120,7 @@ staffRouter.put('/:id', async (request, response) => {
         }
         const saltRounds = 10
         const passwordHash = await bcrypt.hash(body.password, saltRounds)
-        const updatedStaff = await Staff.findByIdAndUpdate(request.params.id, {...body, passwordHash: passwordHash}, { new : true, runValidators: true })
+        const updatedStaff = await Staff.findOneAndUpdate({ username: request.params.username }, {...body, passwordHash: passwordHash}, { new : true, runValidators: true })
         const change = new StaffChange({
             toAccount: updatedStaff._id,
             fromAccount: updatedStaff._id,
@@ -146,7 +146,7 @@ staffRouter.put('/:id', async (request, response) => {
             return response.status(401).json({ error: "cannot remove manager status" })
         }
     }
-    const updatedStaff = await Staff.findByIdAndUpdate(request.params.id, {...body, passwordHash: staff.passwordHash}, { new : true, runValidators: true })
+    const updatedStaff = await Staff.findOneAndUpdate({ username: request.params.username }, {...body, passwordHash: staff.passwordHash}, { new : true, runValidators: true })
     const change = new StaffChange({
         toAccount: updatedStaff._id,
         fromAccount: (managerChange && !selfChange) ? user._id : updatedStaff._id,
@@ -179,12 +179,12 @@ staffRouter.put('/:id', async (request, response) => {
     response.json(updatedStaff)
 })
 
-staffRouter.delete('/:id', async (request, response) => {
+staffRouter.delete('/:username', async (request, response) => {
     const user = request.user
     if (!user || !user.isManager) {
         return response.status(401).json({ error: "not authorized to remove account" })
     }
-    const removedStaff = await Staff.findByIdAndUpdate(request.params.id, { isDeleted: true, expireAt: new Date()}, { new: true} )
+    const removedStaff = await Staff.findOneAndUpdate({ username: request.params.username }, { isDeleted: true, expireAt: new Date()}, { new: true} )
     const change = new StaffChange({
         toAccount: removedStaff._id,
         fromAccount: user._id,

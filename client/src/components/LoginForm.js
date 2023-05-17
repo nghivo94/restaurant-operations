@@ -30,7 +30,7 @@ const LoginForm = () => {
                     flex flex-row justify-center md:justify-start items-center">
                 <div className='flex flex-col 
                     md:w-1/3 w-full sm:min-w-[24rem] max-w-[24rem] md:max-w-none 
-                    h-4/5 max-h-[40rem]
+                    h-4/5 max-h-[40rem] min-h-[36rem]
                     md:ml-48 mx-10
                     bg-white/[.80]'>
                     <div className='font-display text-6xl text-center my-16 flex-grow-0'>Login</div>
@@ -70,7 +70,7 @@ const LoginForm = () => {
                                 border-4 border-black
                                 hover:bg-white hover:text-black
                                 transition-all ease-in-out' >LOGIN</button>
-                        <button className='border-none text-left italic pt-3' onClick={handleAlert}>
+                        <button className='border-none text-left italic pt-3 mb-10' onClick={handleAlert}>
                             <span className='border-b-2 border-black hover:animate-pulse transition-all ease-in-out'>Troubleshooting</span>
                         </button>
                     </form>

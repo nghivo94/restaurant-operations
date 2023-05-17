@@ -7,9 +7,10 @@ import { removeUser } from "../reducers/userReducer"
 
 const Navbar = () => {
     const dispatch = useDispatch()
+    const nagivate = useNavigate()
+    
     const user = useSelector(state => state.user.user)
     const [menuVisible, setMenuVisible] = useState(false)
-    const nagivate = useNavigate()
     const handleLogout = () => {
         if (window.confirm('Logout of current staff account?')) {
             window.localStorage.removeItem('loggedInToken')
@@ -28,8 +29,8 @@ const Navbar = () => {
                     <div className="font-normal italic text-white text-3xl mr-16">Hi, {user.firstName}!</div>
                     {!user.image && <FaUserCircle className="text-white text-4xl mr-2"/> }
                     {menuVisible 
-                        ? <IoMdArrowDropup onClick={() => setMenuVisible(false)} className="text-white text-2xl mr-2" />
-                        : <IoMdArrowDropdown onClick={() => setMenuVisible(true)} className="text-white text-2xl mr-2" />}
+                        ? <IoMdArrowDropup onClick={() => setMenuVisible(false)} className="text-white text-2xl mr-6" />
+                        : <IoMdArrowDropdown onClick={() => setMenuVisible(true)} className="text-white text-2xl mr-6" />}
                 </div>
                 
             </div>
